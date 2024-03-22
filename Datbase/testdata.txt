@@ -1,0 +1,30 @@
+INSERT INTO `uke12oppdrag`.`status` (`Status`) VALUES ('under behandling');
+INSERT INTO `uke12oppdrag`.`status` (`Status`) VALUES ('avsluttet');
+UPDATE `uke12oppdrag`.`status` SET `Status` = 'avsluttet' WHERE (`statusID` = '15');
+
+
+DELETE FROM `uke12oppdrag`.`roller` WHERE (`Rolleid` = '1');
+DELETE FROM `uke12oppdrag`.`roller` WHERE (`Rolleid` = '2');
+DELETE FROM `uke12oppdrag`.`roller` WHERE (`Rolleid` = '3');
+INSERT INTO `uke12oppdrag`.`roller` (`Admin`, `begrenset tilgang`) VALUES ('nei', 'ja');
+INSERT INTO `uke12oppdrag`.`roller` (`Admin`, `begrenset tilgang`) VALUES ('nei', 'ja');
+INSERT INTO `uke12oppdrag`.`roller` (`Admin`, `begrenset tilgang`) VALUES ('ja', 'nei');
+
+
+
+DELETE FROM `uke12oppdrag`.`kunde` WHERE (`brukerID` = '10');
+DELETE FROM `uke12oppdrag`.`kunde` WHERE (`brukerID` = '11');
+DELETE FROM `uke12oppdrag`.`kunde` WHERE (`brukerID` = '12');
+INSERT INTO `uke12oppdrag`.`kunde` (`email`, `password`, `navn`, `beskrivelse`) VALUES ('test@gmail.com', '123', 'test', 'feil1');
+INSERT INTO `uke12oppdrag`.`kunde` (`email`, `password`, `navn`, `beskrivelse`) VALUES ('henri@gmail.com', '12345', 'henri', 'feil2');
+INSERT INTO `uke12oppdrag`.`kunde` (`email`, `password`, `navn`, `beskrivelse`) VALUES ('aleks@gmail.com', '1234', 'aleks', 'feil3');
+
+
+UPDATE `uke12oppdrag`.`ansatte` SET `idAnsatte` = '1', `Rolleid` = '4' WHERE (`idAnsatte` = '1');
+INSERT INTO `uke12oppdrag`.`ansatte` (`idAnsatte`, `navn`, `Rolleid`) VALUES ('2', 'henri', '6');
+
+
+INSERT INTO `uke12oppdrag`.`hendvendelser` (`beskrivelse`, `brukerID`, `statusID`, `idAnsatte`) VALUES ('feil1', '13', '16', '1');
+INSERT INTO `uke12oppdrag`.`hendvendelser` (`beskrivelse`, `brukerID`, `statusID`, `idAnsatte`) VALUES ('feil2', '14', '17', '2');
+
+

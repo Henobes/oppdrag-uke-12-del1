@@ -1,0 +1,117 @@
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema uke12oppdrag
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema uke12oppdrag
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `uke12oppdrag` DEFAULT CHARACTER SET utf8 ;
+USE `uke12oppdrag` ;
+
+-- -----------------------------------------------------
+-- Table `uke12oppdrag`.`Status`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `uke12oppdrag`.`Status` ;
+
+CREATE TABLE IF NOT EXISTS `uke12oppdrag`.`Status` (
+  `statusID` INT NOT NULL AUTO_INCREMENT,
+  `Status` VARCHAR(45) NULL,
+  PRIMARY KEY (`statusID`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `uke12oppdrag`.`Roller`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `uke12oppdrag`.`Roller` ;
+
+CREATE TABLE IF NOT EXISTS `uke12oppdrag`.`Roller` (
+  `Rolleid` INT NULL AUTO_INCREMENT,
+  `Admin` VARCHAR(45) NULL,
+  `begrenset tilgang` VARCHAR(45) NULL,
+  PRIMARY KEY (`Rolleid`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `uke12oppdrag`.`Ansatte`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `uke12oppdrag`.`Ansatte` ;
+
+CREATE TABLE IF NOT EXISTS `uke12oppdrag`.`Ansatte` (
+  `idAnsatte` INT NULL AUTO_INCREMENT,
+  `navn` VARCHAR(45) NULL,
+  `Rolleid` INT NULL,
+  PRIMARY KEY (`idAnsatte`),
+  INDEX `fk_Ansatte_Roller1_idx` (`Rolleid` ASC),
+  CONSTRAINT `fk_Ansatte_Roller1`
+    FOREIGN KEY (`Rolleid`)
+    REFERENCES `uke12oppdrag`.`Roller` (`Rolleid`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `uke12oppdrag`.`Hendvendelser`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `uke12oppdrag`.`Hendvendelser` ;
+
+CREATE TABLE IF NOT EXISTS `uke12oppdrag`.`Hendvendelser` (
+  `saksnummer` INT NOT NULL AUTO_INCREMENT,
+  `beskrivelse` VARCHAR(200) NULL,
+  `brukerID` INT NULL,
+  `statusID` INT NULL,
+  `idAnsatte` INT NULL,
+  PRIMARY KEY (`saksnummer`),
+  INDEX `fk_Hendvendelser_Kunde1_idx` (`brukerID` ASC),
+  INDEX `fk_Hendvendelser_Status1_idx` (`statusID` ASC),
+  INDEX `fk_Hendvendelser_Ansatte1_idx` (`idAnsatte` ASC),
+  CONSTRAINT `fk_Hendvendelser_Kunde1`
+    FOREIGN KEY (`brukerID`)
+    REFERENCES `uke12oppdrag`.`Kunde` (`brukerID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Hendvendelser_Status1`
+    FOREIGN KEY (`statusID`)
+    REFERENCES `uke12oppdrag`.`Status` (`statusID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Hendvendelser_Ansatte1`
+    FOREIGN KEY (`idAnsatte`)
+    REFERENCES `uke12oppdrag`.`Ansatte` (`idAnsatte`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `uke12oppdrag`.`Kunde`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `uke12oppdrag`.`Kunde` ;
+
+CREATE TABLE IF NOT EXISTS `uke12oppdrag`.`Kunde` (
+  `brukerID` INT NOT NULL AUTO_INCREMENT,
+  `email` VARCHAR(50) NULL,
+  `password` VARCHAR(32) NULL,
+  `navn` VARCHAR(15) NULL,
+  `beskrivelse` VARCHAR(200) NULL,
+  `saksnummer` INT NULL,
+  PRIMARY KEY (`brukerID`),
+  INDEX `fk_Kunde_Hendvendelser1_idx` (`saksnummer` ASC),
+  CONSTRAINT `fk_Kunde_Hendvendelser1`
+    FOREIGN KEY (`saksnummer`)
+    REFERENCES `uke12oppdrag`.`Hendvendelser` (`saksnummer`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION);
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
